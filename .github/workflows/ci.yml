@@ -10,27 +10,15 @@ jobs:
   build:
     runs-on: self-hosted
 
-    strategy:
-      matrix:
-        python-version: [3.x]
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
 
     - name: Check formatting
       run: bash -c "tools/check_format.sh 2>&1 | tee tools/check_format.txt"
 
     - name: Check relocs
       run: bash -c "tools/reloc_spec_check.sh"
-
-    - name: Install Python dependencies
-      run: python -m pip install -r requirements.txt
 
     - name: Copy ROM
       run: cp /usr/local/etc/roms/mm.us.rev1.z64 baserom.mm.us.rev1.z64
